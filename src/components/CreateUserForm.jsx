@@ -36,9 +36,6 @@ const CreateUserForm = ({ closeModal, onUserAdd, existingUser }) => {
     if (!formData.phone || formData.phone.length < 10) {
       newErrors.phone = 'Phone number is invalid';
     }
-    if (!formData.username || formData.username.length < 3) {
-      newErrors.username = 'Username must be at least 3 characters';
-    }
     if (!formData.address.street || !formData.address.city) {
       newErrors.address = 'Address fields are required';
     }
@@ -56,13 +53,19 @@ const CreateUserForm = ({ closeModal, onUserAdd, existingUser }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name.includes('address')) {
-      const [_, field] = name.split('.');
-      setFormData({ ...formData, address: { ...formData.address, [field]: value } });
+      const field = name.split('.')[1];
+      setFormData((prevData) => ({
+        ...prevData,
+        address: { ...prevData.address, [field]: value },
+      }));
     } else if (name.includes('company')) {
-      const [_, field] = name.split('.');
-      setFormData({ ...formData, company: { ...formData.company, [field]: value } });
+      const field = name.split('.')[1];
+      setFormData((prevData) => ({
+        ...prevData,
+        company: { ...prevData.company, [field]: value },
+      }));
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
   };
 
